@@ -182,8 +182,17 @@ final class AhcEventFilter extends HttpClientFilter {
         final HttpTransactionContext context =
                 HttpTransactionContext.currentTransaction(httpHeader);
         final int status = responsePacket.getStatus();
-        if (context.establishingTunnel && HttpStatus.OK_200.statusMatches(status)) {
-            return;
+        if (context.establishingTunnel) { 
+        	if (HttpStatus.OK_200.statusMatches(status)) {
+        		return;
+        	} else if (HttpStatus.INTERNAL_SERVER_ERROR_500.statusMatches(status)||
+        			HttpStatus.NOT_IMPLEMENTED_501.statusMatches(status)||
+        			HttpStatus.BAD_GATEWAY_502.statusMatches(status)||
+        			HttpStatus.SERVICE_UNAVAILABLE_503.statusMatches(status)||
+        			HttpStatus.GATEWAY_TIMEOUT_504.statusMatches(status)||
+        			HttpStatus.HTTP_VERSION_NOT_SUPPORTED_505.statusMatches(status)) {
+        		context.abort(new IOException("Proxy server returned "+status+" status for CONNECT attempt."));
+        	}
         }
         if (HttpStatus.CONINTUE_100.statusMatches(status)) {
             ctx.notifyUpstream(new ContinueEvent(context));            
