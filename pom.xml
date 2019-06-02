@@ -498,7 +498,7 @@
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
         <surefire.version>2.12</surefire.version>
-        <jetty.version>9.4.14.v20181114</jetty.version>
+        <jetty.version>9.4.16.v20190411</jetty.version>
     </properties>
 </project>
 
