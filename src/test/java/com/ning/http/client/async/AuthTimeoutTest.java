@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, 2020 Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2010-2012 Sonatype, Inc. All rights reserved.
  *
  * This program is licensed to you under the Apache License Version 2.0,
@@ -56,11 +56,19 @@ public abstract class AuthTimeoutTest extends AbstractBasicTest {
 
     private final static String admin = "admin";
 
+    /**
+      * A conversion pattern equivalent to the TTCCLayout. Current value is <b>%r [%t] %p %c %notEmpty{%x }- %m%n</b>.
+      * Taken from Log4J 1.17
+      */
+    public static final String TTCC_CONVERSION_PATTERN = "%r [%t] %p %c %notEmpty{%x }- %m%n";
+
     public void setUpServer(String auth) throws Exception {
         server = new Server();
         Logger root = Logger.getRootLogger();
         root.setLevel(Level.DEBUG);
-        root.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
+        ConsoleAppender appender = new ConsoleAppender();
+        appender.setLayout(new PatternLayout(TTCC_CONVERSION_PATTERN));
+        root.addAppender(appender);
 
         port1 = findFreePort();
         ServerConnector listener = new ServerConnector(server);

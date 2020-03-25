@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2018 Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, 2020 Oracle and/or its affiliates. All rights reserved.
  * Copyright (c) 2010-2012 Sonatype, Inc. All rights reserved.
  *
  * This program is licensed to you under the Apache License Version 2.0,
@@ -62,7 +62,9 @@ public abstract class DigestAuthTest extends AbstractBasicTest {
         server = new Server();
         Logger root = Logger.getRootLogger();
         root.setLevel(Level.DEBUG);
-        root.addAppender(new ConsoleAppender(new PatternLayout(PatternLayout.TTCC_CONVERSION_PATTERN)));
+        ConsoleAppender appender = new ConsoleAppender();
+        appender.setLayout(new PatternLayout(AuthTimeoutTest.TTCC_CONVERSION_PATTERN));
+        root.addAppender(appender);
 
         port1 = findFreePort();
         ServerConnector listener = new ServerConnector(server);
